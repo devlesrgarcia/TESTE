@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Usuários</title>
+</head>
+<body>
+    <h1>CRUD Usuários</h1>
+    <button onclick="obterUsuarioRandom()">Obter Usuário Random</button>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Telefone</th>
+                <th>Rua</th>
+                <th>Cidade</th>
+                <th>Estado</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody id="usuarios"></tbody>
+    </table>
+
+    <h2>Editar Usuário</h2>
+    <label for="idUsuarioEditar">ID do Usuário:</label>
+    <input type="text" id="idUsuarioEditar" name="idUsuarioEditar"><br>
+    <label for="nomeUsuario">Nome:</label>
+    <input type="text" id="nomeUsuario" name="nomeUsuario"><br>
+    <label for="telefoneUsuario">Telefone:</label>
+    <input type="text" id="telefoneUsuario" name="telefoneUsuario"><br>
+    <label for="ruaUsuario">Rua:</label>
+    <input type="text" id="ruaUsuario" name="ruaUsuario"><br>
+    <label for="cidadeUsuario">Cidade:</label>
+    <input type="text" id="cidadeUsuario" name="cidadeUsuario"><br>
+    <label for="estadoUsuario">Estado:</label>
+    <input type="text" id="estadoUsuario" name="estadoUsuario"><br>
+    <button onclick="atualizarUsuario()">Atualizar Usuário</button>
+    <button onclick="enviarNovoUsuario()">Adicionar Usuário</button>
+    <button onclick="limparUsuarios()">Limpar</button>
+
+    <script>
+        function atualizarUsuarios() {
+            fetch('/Usuario/ObterTodos')
+                .then(response => response.json())
+                .then(data => {
+                    const usuariosTbody = document.getElementById('usuarios');
+                    usuariosTbody.innerHTML = ''; 
+
+                    data.forEach(usuario => {
+                        const linha = document.createElement('tr');
+                        linha.innerHTML = `
+                                <td>${usuario.usuarioid}</td>
+                                <td>${usuario.nome}</td>
+                                <td>${usuario.telefone}</td>
+                                <td>${usuario.rua}</td>
+                                <td>${usuario.cidade}</td>
+                                <td>${usuario.estado}</td>
+                                <td><button onclick="excluirUsuario(${usuario.usuarioid})">Excluir</button></td>
+                            `;
+                        usuariosTbody.appendChild(linha);
+                    });
+                })
+                .catch(error => console.error('Erro ao atualizar usuários:', error));
+        }
+
+        function obterUsuarioRandom() {
+            fetch('/Usuario/APIRandom')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('nomeUsuario').value = data.nome;
+                    document.getElementById('telefoneUsuario').value = data.telefone;
+                    document.getElementById('ruaUsuario').value = data.rua;
+                    document.getElementById('cidadeUsuario').value = data.cidade;
+                    document.getElementById('estadoUsuario').value = data.estado;
+                })
+                .catch(error => console.error('Erro ao obter usuário random:', error));
+        }
+
+        function enviarNovoUsuario() {
+            fetch('/Usuario', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Novo usuário adicionado:', data);
+                    atualizarUsuarios(); // Atualiza a lista de usuários após adicionar um novo
+                })
+                .catch(error => console.error('Erro ao adicionar novo usuário:', error));
+        }
+
+        function excluirUsuario(id) {
+            fetch(`/Usuario/${id}`, {
+                method: 'DELETE'
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log(`Usuário com ID ${id} excluído com sucesso.`);
+                        atualizarUsuarios(); // Atualiza a lista de usuários após excluir um
+                    } else {
+                        console.error(`Erro ao excluir usuário com ID ${id}:`, response.statusText);
+                    }
+                })
+                .catch(error => console.error(`Erro ao excluir usuário com ID ${id}:`, error));
+        }
+
+        function atualizarUsuario() {
+            const id = document.getElementById('idUsuarioEditar').value;
+            const nome = document.getElementById('nomeUsuario').value;
+            const telefone = document.getElementById('telefoneUsuario').value;
+            const rua = document.getElementById('ruaUsuario').value;
+            const cidade = document.getElementById('cidadeUsuario').value;
+            const estado = document.getElementById('estadoUsuario').value;
+
+            fetch(`/Usuario/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    nome: nome,
+                    telefone: telefone,
+                    rua: rua,
+                    cidade: cidade,
+                    estado: estado
+                })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log(`Usuário com ID ${id} atualizado com sucesso.`);
+                        atualizarUsuarios(); // Atualiza a lista de usuários após atualizar um
+                    } else {
+                        console.error(`Erro ao atualizar usuário com ID ${id}:`, response.statusText);
+                    }
+                })
+                .catch(error => console.error(`Erro ao atualizar usuário com ID ${id}:`, error));
+        }
+
+        function limparUsuarios() {
+            const usuariosTbody = document.getElementById('usuarios');
+            usuariosTbody.innerHTML = ''; // Limpa todos os usuários da tabela
+        }
+
+        // Ao carregar a página, atualiza os usuários
+        window.onload = atualizarUsuarios;
+    </script>
+</body>
+</html>

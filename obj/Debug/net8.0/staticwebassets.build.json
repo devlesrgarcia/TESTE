@@ -1,0 +1,39 @@
+{
+  "Version": 1,
+  "Hash": "aaVfGYSt5frdQlGAsGNVdajgTN8jitT7li7qMQ0D83U=",
+  "Source": "APIUsuario",
+  "BasePath": "_content/APIUsuario",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "APIUsuario\\wwwroot",
+      "Source": "APIUsuario",
+      "ContentRoot": "C:\\Users\\Segredo\\Desktop\\Curso\\C#\\ProjetoBack\\final\\APIUsuario\\APIUsuario\\wwwroot\\",
+      "BasePath": "_content/APIUsuario",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\Segredo\\Desktop\\Curso\\C#\\ProjetoBack\\final\\APIUsuario\\APIUsuario\\wwwroot\\index.html",
+      "SourceId": "APIUsuario",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Segredo\\Desktop\\Curso\\C#\\ProjetoBack\\final\\APIUsuario\\APIUsuario\\wwwroot\\",
+      "BasePath": "_content/APIUsuario",
+      "RelativePath": "index.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\index.html"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+@APIUsuario_HostAddress = http://localhost:5230
+
+GET {{APIUsuario_HostAddress}}/APIUsuario/
+Accept: application/json
+
+###
