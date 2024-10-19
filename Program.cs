@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 
 var builder = WebApplication.CreateBuilder(args);
+//necessario para funcionar o index
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins",

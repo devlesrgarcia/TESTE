@@ -14,15 +14,15 @@ namespace APIUsuario.Controllers
     [Route("[controller]")]
     public class UsuarioController : ControllerBase
     {
-        // Crio uma variável estática para armazenar os dados do usuário
+        // variável estática para armazenar os dados do usuário
         private static dynamic _userData;
-        // Crio o contexto do DB
+        // contexto do DB
         private readonly APIUsuarioContext _context;
         public UsuarioController(APIUsuarioContext context)
         {
             _context = context;
         }
-        // Endpoint para obter todos os usuários
+        // endpoint para obter todos os usuários
         [HttpGet("ObterTodos", Name = "ObterTodos")]
         public IActionResult Get()
         {
@@ -36,7 +36,7 @@ namespace APIUsuario.Controllers
                 return StatusCode(500, $"Erro ao obter usuários: {ex.Message}");
             }
         }
-        // Endpoint para API RANDOMUSER
+        // endpoint para API RANDOMUSER
         [HttpGet("APIRandom", Name = "APIRandom")]
         public async Task<IActionResult> GetRandom()
         {
@@ -48,11 +48,11 @@ namespace APIUsuario.Controllers
 
                     if (response.IsSuccessStatusCode)
                     {
-                        // Aqui eu converto para json
+                        // converto para json
                         string content = await response.Content.ReadAsStringAsync();
                         JObject result = JObject.Parse(content);
 
-                        // Extrai os dados
+                        // extraindo os dados
                         string name = result["results"][0]["name"]["first"].ToString() + " " +
                                       result["results"][0]["name"]["last"].ToString();
                         string phone = result["results"][0]["phone"].ToString();
@@ -85,7 +85,7 @@ namespace APIUsuario.Controllers
             }
         }
 
-        // Endpoint para cadastrar usando os dados da API RANDOMUSER
+        // endpoint para cadastrar usando a API RANDOMUSER
         [HttpPost]
         public IActionResult Post()
         {
@@ -93,10 +93,10 @@ namespace APIUsuario.Controllers
             {
                 if (_userData == null)
                 {
-                    return BadRequest("Execute primeiro o GET para obter os dados.");
+                    return BadRequest("Obtenha os dados antes.");
                 }
 
-                // Cria um novo usuário com os dados
+                // cria um novo usuário com os dados
                 var usuario = new Usuario
                 {
                     Nome = _userData.Nome,
@@ -105,7 +105,7 @@ namespace APIUsuario.Controllers
                     Cidade = _userData.Cidade,
                     Estado = _userData.Estado
                 };
-
+                //persiste no bd
                 _context.Usuarios.Add(usuario);
                 _context.SaveChanges();
 
@@ -117,13 +117,13 @@ namespace APIUsuario.Controllers
             }
         }
 
-        // Endpoint para editar
+        // endpoint para editar
         [HttpPut("{id}")]
         public IActionResult Put(int id, Usuario usuarioNovo)
         {
             try
             {
-                // Verifica se o ID digitado existe
+                // verifica se o ID digitado existe
                 var usuarioAtual = _context.Usuarios.FirstOrDefault(u => u.Usuarioid == id);
 
                 if (usuarioAtual == null)
@@ -147,13 +147,13 @@ namespace APIUsuario.Controllers
             }
         }
 
-        // Endpoint para excluir 
+        // endpoint para excluir 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             try
             {
-                // Verifica se o ID digitado existe
+                // verifica se o ID digitado existe
                 var usuario = _context.Usuarios.FirstOrDefault(u => u.Usuarioid == id);
 
                 if (usuario == null)
